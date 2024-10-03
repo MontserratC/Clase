@@ -64,6 +64,7 @@ hybpiper check_targetfile -t_dna test_targets.fasta
 
 ## Parte 3: Ensamble
 ```
+###puede salir un error al correr?donde quedaron los fast q? agregar -r raw_reads/N?
 # Ensamblar solo una muestra
 hybpiper assemble -t_dna test_targets.fasta -r NZ281_R*_test.fastq --prefix NZ281 --bwa --cpu 4
 ```
@@ -75,13 +76,16 @@ ls NZ281/
 ```
 rm -r NZ281/
 ```
-
+#se revisa primero el archivo antes de correr para cada muestra
 ```
 less namelist.txt
 ```
 
 ```
 # Ensamblar todas las secuencias
+# es un loop para gacerlo con todas las muestras
+
+```
 while read name;
 do hybpiper assemble -t_dna test_targets.fasta -r raw_reads/$name*.fastq --prefix $name --bwa --cpu 4;
 done < namelist.txt
@@ -140,9 +144,11 @@ ls
 Para descargar del servidor y ver el archivo png en la computadora local
 ```
 # Para Windows 10 con ssh
+
+scp -P 14420 montbio@189.241.181.46:/mnt/fury/montbio/hybpiper_tutorial/test_dataset/recovery_heatmap.png C:"\Users\NODES\Desktop"
 # Ver como se llama la carpeta principal en la que estamos y cuál es el nombre de usuario
 echo %cd%
-scp -P 14420 rubis@189.241.xxx/xxx:/mnt/furys/rubis/hybpiper_tutorial/test_dataset/recovery_heatmap.png C:\Users\usr\Desktop
+scp -P 14420 rubis@189.241.xxx/xxx:/home/rubis/hybpiper_tutorial/test_dataset/recovery_heatmap.png C:\Users\usr\Desktop
 ```
 
 ```
@@ -162,12 +168,13 @@ scp -p 14420 rubis@189.241.xxx/xxx:/home/rubis/hybpiper_tutorial/test_dataset/re
 
 ```
 ### Generar matrices fasta de exones
+#### este corre bien
 hybpiper retrieve_sequences dna -t_dna test_targets.fasta --sample_names namelist.txt --fasta_dir exon_fastas
 ```
 
 
 ```
-### Generar matrices fasta de intrones
+### Generar matrices fasta de intrones da un error
 hybpiper retrieve_sequences intron -t_dna test_targets.fasta --sample_names namelist.txt --fasta_dir intron_fastas
 ```
 
@@ -181,7 +188,14 @@ hybpiper paralog_retriever namelist.txt -t_dna test_targets.fasta
 ```
 ls paralog*
 ```
-
+#para descargar el head map del paralogo
+```
+C:\Users\NODES>scp -P 14420 montbio@189.241.181.46:/mnt/fury/montbio/hybpiper_tutorial/test_dataset/paralog_heatmap.png C:"\Users\NODES\Desktop"
+montbio@189.241.181.46's password:
+Permission denied, please try again.
+montbio@189.241.181.46's password:
+paralog_heatmap.png                                                                                                                                                              100%   34KB   1.1MB/s   00:00
+```
 
 
 ```
